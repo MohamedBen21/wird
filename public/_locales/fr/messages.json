@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Wird – Rappel du Coran et des hadiths"
+  },
+  "extDescription": {
+    "message": "Rappels de versets du Coran et de hadiths, plus un lecteur du Coran avec recherche sur toute page. Arabe, anglais, français."
+  },
+  "cmdOpenReader": {
+    "message": "Ouvrir le lecteur du Coran sur cette page"
+  }
+}

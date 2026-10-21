@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "Wird – Quran & Hadith Reminder"
+  },
+  "extDescription": {
+    "message": "Quran verses and hadith reminders every few minutes, plus a Quran reader with search on any page. Arabic, English, French."
+  },
+  "cmdOpenReader": {
+    "message": "Open the Quran reader on this page"
+  }
+}
