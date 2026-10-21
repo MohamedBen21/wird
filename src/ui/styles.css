@@ -1,0 +1,333 @@
+/* Shared by the on-page overlay (inside a shadow root), the popup and the options page.
+   Only px units: rem would follow the host page's root font size. */
+
+.nour {
+  all: initial;
+  --bg: #fffdf7;
+  --bg-soft: #f6f1e3;
+  --fg: #1f2a24;
+  --muted: #6a7068;
+  --accent: #0f5132;
+  --accent-fg: #ffffff;
+  --gold: #a47a1e;
+  --border: #e4dcc6;
+  --focus: #1d7a4d;
+  --shadow: 0 12px 32px rgba(15, 40, 28, 0.22), 0 2px 6px rgba(15, 40, 28, 0.12);
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-ar: "Nour Amiri Quran", "Amiri Quran", "Amiri", "Scheherazade New", "Noto Naskh Arabic", "Traditional Arabic", "Geeza Pro", serif;
+  display: block;
+  box-sizing: border-box;
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+.nour[data-theme="dark"] {
+  --bg: #17211c;
+  --bg-soft: #1f2c25;
+  --fg: #e8efe9;
+  --muted: #9bab9f;
+  --accent: #4fb98a;
+  --accent-fg: #0d1a13;
+  --gold: #e6c266;
+  --border: #2d3d34;
+  --focus: #7ad4ab;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nour[data-theme="auto"] {
+    --bg: #17211c;
+    --bg-soft: #1f2c25;
+    --fg: #e8efe9;
+    --muted: #9bab9f;
+    --accent: #4fb98a;
+    --accent-fg: #0d1a13;
+    --gold: #e6c266;
+    --border: #2d3d34;
+    --focus: #7ad4ab;
+    --shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.nour *, .nour *::before, .nour *::after { box-sizing: border-box; }
+.nour p, .nour h1, .nour h2, .nour h3, .nour ul, .nour ol, .nour figure { margin: 0; padding: 0; }
+.nour ul, .nour ol { list-style: none; }
+
+.nour button, .nour input, .nour select, .nour textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.nour button { cursor: pointer; }
+
+.nour .toast, .nour .reader-body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.nour :focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ buttons */
+.nour .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.nour .btn:hover { background: var(--bg-soft); }
+.nour .btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+.nour .btn-primary:hover { filter: brightness(1.08); background: var(--accent); }
+.nour .btn-ghost { border-color: transparent; background: transparent; }
+.nour .btn-icon { width: 32px; padding: 0; font-size: 16px; }
+.nour .btn[disabled] { opacity: 0.5; cursor: default; }
+
+/* ------------------------------------------------------------------ reminder card */
+.nour .card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.nour .card-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+}
+.nour .card-body { padding: 14px 16px 12px; display: grid; gap: 10px; }
+.nour .card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.nour .card-title { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.02em; }
+.nour .badge {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-inline-end: 8px;
+}
+.nour .texts { display: grid; gap: 10px; }
+.nour .t-ar {
+  font-family: var(--font-ar);
+  line-height: 2;
+  text-align: right;
+  direction: rtl;
+  unicode-bidi: isolate;
+}
+.nour .t-tr { font-size: 14px; color: var(--fg); direction: ltr; text-align: left; unicode-bidi: isolate; }
+.nour .t-tr + .t-tr { border-top: 1px dashed var(--border); padding-top: 8px; }
+.nour .t-ar + .t-tr { border-top: 1px dashed var(--border); padding-top: 10px; }
+.nour .actions { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ------------------------------------------------------------------ toast */
+.nour .toast {
+  position: fixed;
+  z-index: 1;
+  width: min(440px, calc(100vw - 32px));
+  max-height: min(70vh, 640px);
+  overflow: auto;
+  pointer-events: auto;
+  box-shadow: var(--shadow);
+  border-radius: 14px;
+  animation: nour-in 0.28s ease-out both;
+}
+.nour .toast.pos-bottom-right { bottom: 16px; right: 16px; }
+.nour .toast.pos-bottom-left { bottom: 16px; left: 16px; }
+.nour .toast.pos-top-right { top: 16px; right: 16px; }
+.nour .toast.pos-top-left { top: 16px; left: 16px; }
+.nour .toast .card { border: 0; border-radius: 14px; }
+.nour .progress {
+  height: 3px;
+  background: var(--accent);
+  transform-origin: left center;
+  animation-name: nour-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+.nour[dir="rtl"] .progress { transform-origin: right center; }
+
+@keyframes nour-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes nour-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nour .toast { animation: none; }
+}
+
+/* ------------------------------------------------------------------ reader */
+.nour .reader {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  inset-inline-end: 0;
+  z-index: 2;
+  width: min(480px, 100vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--fg);
+  border-inline-start: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  pointer-events: auto;
+  animation: nour-slide 0.25s ease-out both;
+}
+.nour[dir="rtl"] .reader { animation-name: nour-slide-rtl; }
+@keyframes nour-slide { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes nour-slide-rtl { from { transform: translateX(-24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .nour .reader { animation: none; } }
+
+.nour .reader-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-soft);
+}
+.nour .reader-title { flex: 1; font-weight: 700; font-size: 15px; color: var(--accent); }
+.nour .search {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.nour .search input {
+  width: 100%;
+  min-height: 38px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 14px;
+}
+.nour .reader-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; scroll-behavior: auto; }
+.nour .pad { padding: 12px; }
+.nour .hint { color: var(--muted); font-size: 13px; padding: 16px 12px; text-align: center; }
+.nour .section-label {
+  padding: 10px 12px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.nour .surah-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  text-align: start;
+}
+.nour .surah-row:hover { background: var(--bg-soft); }
+.nour .surah-num {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 12px;
+}
+.nour .surah-names { flex: 1; min-width: 0; }
+.nour .surah-name-main { font-weight: 600; }
+.nour .surah-name-sub { font-size: 12px; color: var(--muted); }
+.nour .surah-ar { font-family: var(--font-ar); font-size: 20px; direction: rtl; }
+
+.nour .chapter-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.nour .chapter-title { flex: 1; text-align: center; }
+.nour .chapter-title b { display: block; font-size: 14px; }
+.nour .chapter-title span { font-size: 12px; color: var(--muted); }
+
+.nour .basmala {
+  font-family: var(--font-ar);
+  text-align: center;
+  direction: rtl;
+  padding: 18px 12px 6px;
+  color: var(--accent);
+  line-height: 2;
+}
+
+.nour .verse {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 120px;
+  scroll-margin-top: 60px; /* clears the sticky surah header */
+}
+.nour .verse.is-target { background: color-mix(in srgb, var(--gold) 18%, transparent); }
+.nour .verse-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.nour .verse-ref { font-size: 12px; font-weight: 700; color: var(--gold); }
+.nour .verse .t-tr { margin-top: 6px; }
+.nour .verse .t-ar + .t-tr { margin-top: 8px; }
+.nour .end-mark { color: var(--gold); font-size: 0.8em; white-space: nowrap; }
+
+.nour .nav-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 12px 24px;
+}
+.nour .more { color: var(--muted); font-size: 12px; padding: 10px 12px; text-align: center; }
+
+/* ------------------------------------------------------------------ popup / options */
+.nour .page { padding: 14px; display: grid; gap: 12px; }
+.nour .page-head { display: flex; align-items: center; gap: 10px; }
+.nour .page-head img { width: 28px; height: 28px; border-radius: 6px; }
+.nour .page-head h1 { font-size: 16px; line-height: 1.1; }
+.nour .page-head p { font-size: 12px; color: var(--muted); }
+.nour .note {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+.nour .note.warn { border-color: var(--gold); }
+.nour .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }

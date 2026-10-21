@@ -1,0 +1,8 @@
+/* Declared at document level, so only for extension pages (popup, options). The overlay injects its own. */
+@font-face {
+  font-family: "Nour Amiri Quran";
+  src: url("/fonts/amiri-quran-arabic.woff2") format("woff2");
+  font-display: swap;
+}
+html, body { margin: 0; padding: 0; }
+.nour.surface { background: var(--bg); min-height: 100vh; }
