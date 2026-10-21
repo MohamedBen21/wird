@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wird – Quran and hadith reminders</title>
+<meta name="description" content="Quran verses and hadith reminders while you browse, plus a Quran reader on any page. Chrome and Firefox. Offline, no tracking.">
+<style>
+@font-face{font-family:"Amiri Quran";src:url("fonts/amiri-quran-arabic.woff2") format("woff2");font-display:swap}
+:root{
+  --green-900:#0a3a27; --green-800:#0f5132; --green-700:#146c43;
+  --gold:#e0b95a; --gold-deep:#8a6a14;
+  --bg:#f1f5f1; --surface:#fbfcfa; --ink:#14231b; --muted:#506157; --rule:#cdd8cf;
+  --code-bg:#0d1f16; --code-ink:#d9efe0;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --arabic:"Amiri Quran","Traditional Arabic",serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0c1611;--surface:#12211a;--ink:#e6efe8;--muted:#9bb0a3;--rule:#26382d;--gold-deep:#e0b95a;--code-bg:#08120d}
+}
+:root[data-theme="dark"]{--bg:#0c1611;--surface:#12211a;--ink:#e6efe8;--muted:#9bb0a3;--rule:#26382d;--gold-deep:#e0b95a;--code-bg:#08120d}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--sans)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:4px}
+.wrap{width:min(1080px,100% - 40px);margin-inline:auto}
+
+/* ---------- hero ---------- */
+.hero{background:
+  radial-gradient(900px 500px at 78% 30%,rgba(20,108,67,.55),transparent 70%),
+  linear-gradient(160deg,var(--green-900),#0b2f20 70%);
+  color:#eaf4ec;padding:28px 0 84px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;opacity:.07;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23e0b95a' stroke-width='2'%3E%3Cpath d='M60 6l54 54-54 54L6 60z'/%3E%3Cpath d='M60 30l30 30-30 30-30-30z'/%3E%3Ccircle cx='60' cy='60' r='9'/%3E%3C/g%3E%3C/svg%3E")}
+nav{display:flex;align-items:center;gap:22px;position:relative}
+nav .brand{font:600 20px var(--serif);text-decoration:none;display:flex;align-items:baseline;gap:10px;margin-right:auto}
+nav .brand b{font:400 26px var(--arabic);color:var(--gold)}
+nav a.l{font-size:15px;color:#bcd3c4;text-decoration:none}
+nav a.l:hover{color:#fff}
+nav .gh{border:1px solid #3b6a52;padding:6px 14px;border-radius:999px}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;margin-top:64px;position:relative}
+h1{font:600 clamp(40px,6vw,68px)/1.04 var(--serif);letter-spacing:-.02em;margin:0 0 22px}
+.lede{font-size:19px;color:#c7dccd;max-width:34em;margin:0 0 30px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-block;padding:12px 22px;border-radius:10px;font-weight:600;text-decoration:none;border:1px solid transparent}
+.btn.gold{background:var(--gold);color:#2a1f03}
+.btn.gold:hover{background:#ecc970}
+.btn.ghost{border-color:#3b6a52;color:#eaf4ec}
+.btn.ghost:hover{background:rgba(255,255,255,.07)}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin:26px 0 0;padding:0;list-style:none;font-size:14.5px;color:#a9c4b3}
+.facts li::before{content:"✓";color:var(--gold);margin-right:7px}
+
+/* live reminder card */
+.demo{position:relative}
+.toast{background:#fdfcf6;color:#1a2a21;border-radius:16px;padding:20px 22px 18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);
+  border-top:3px solid var(--gold);transform:rotate(-1.4deg);transition:transform .25s}
+.toast:hover{transform:rotate(0)}
+.toast-head{display:flex;align-items:center;gap:10px;font-size:14px;color:#566a5d}
+.tag{background:#e8efe6;color:var(--green-800);font-weight:700;font-size:12px;letter-spacing:.04em;padding:2px 10px;border-radius:999px}
+.toast .ar{font:400 clamp(26px,3.2vw,34px)/2 var(--arabic);direction:rtl;text-align:right;margin:10px 0 8px}
+.toast .tr{border-top:1px dashed #d8dccb;padding-top:10px;font-size:16px;margin:0 0 14px;min-height:3.2em}
+.toast .row{display:flex;gap:8px}
+.toast button{font:600 14px var(--sans);padding:7px 14px;border-radius:8px;border:1px solid #d5dccf;background:#fff;color:#1a2a21;cursor:pointer}
+.toast button.p{background:var(--green-800);border-color:var(--green-800);color:#fff}
+.toast button:hover{filter:brightness(.96)}
+.fade{animation:swap .35s ease}
+@keyframes swap{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.demo-note{font-size:13px;color:#8fb09c;margin:16px 4px 0;text-align:center}
+
+/* ---------- sections ---------- */
+section{padding:84px 0 0}
+h2{font:600 clamp(28px,3.6vw,40px)/1.15 var(--serif);letter-spacing:-.01em;margin:0 0 14px}
+.sub{color:var(--muted);max-width:40em;margin:0 0 40px}
+
+/* screenshots: browser-framed strip */
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.shot{margin:0}
+.shot img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--rule);box-shadow:0 14px 30px -18px rgba(10,58,39,.5);background:var(--surface)}
+.shot figcaption{font-size:14.5px;color:var(--muted);margin-top:10px}
+.shot.wide{grid-column:span 2}
+.shot.narrow{display:flex;flex-direction:column;align-items:flex-start}
+.shot.narrow img{max-width:300px}
+
+/* features: ruled list, not cards */
+.feat{border-top:2px solid var(--ink);margin:0;padding:0;list-style:none}
+.feat li{display:grid;grid-template-columns:200px 1fr;gap:24px;padding:20px 0;border-bottom:1px solid var(--rule)}
+.feat h3{font:600 19px var(--serif);margin:0}
+.feat p{margin:0;color:var(--muted)}
+.feat code,.inline{font:14px ui-monospace,Menlo,Consolas,monospace;background:rgba(20,108,67,.12);padding:1px 6px;border-radius:5px;color:var(--ink)}
+
+/* install */
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--rule);margin-bottom:24px}
+.tab{font:600 15px var(--sans);padding:10px 18px;border:0;background:none;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tab[aria-selected="true"]{color:var(--ink);border-color:var(--gold)}
+.panel[hidden]{display:none}
+.steps{margin:0 0 8px;padding-left:1.3em}
+.steps li{margin:6px 0}
+.cmd{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:12px;margin:14px 0}
+.cmd pre{margin:0;padding:16px 64px 16px 18px;overflow-x:auto;font:14.5px/1.7 ui-monospace,Menlo,Consolas,monospace}
+.cmd .c{color:#6f8f7c}
+.cmd button{position:absolute;top:10px;right:10px;font:600 12px var(--sans);padding:5px 11px;border-radius:7px;border:1px solid #2f5440;background:#12281d;color:#cfe6d6;cursor:pointer}
+.cmd button:hover{background:#1a3829}
+.label{font:600 15px var(--sans);margin:26px 0 0}
+table{border-collapse:collapse;width:100%;font-size:15.5px}
+th,td{text-align:left;padding:12px 14px 12px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:14.5px}
+td:first-child{white-space:nowrap}
+kbd{font:600 13px ui-monospace,Menlo,monospace;border:1px solid var(--rule);border-bottom-width:2px;border-radius:6px;padding:1px 7px;background:var(--surface)}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.lic{list-style:none;padding:0;margin:0}
+.lic li{padding:10px 0;border-bottom:1px solid var(--rule)}
+.lic span{color:var(--muted)}
+
+footer{margin-top:96px;background:var(--green-900);color:#a9c4b3;padding:40px 0;font-size:15px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center}
+footer b{font:400 28px var(--arabic);color:var(--gold);margin-right:6px}
+footer a{color:#d7e8dc}
+footer .sp{margin-left:auto}
+
+@media (max-width:860px){
+  .hero-grid,.two{grid-template-columns:1fr;gap:40px}
+  .shots{grid-template-columns:1fr}.shot.wide{grid-column:auto}
+  .feat li{grid-template-columns:1fr;gap:6px}
+  nav a.l.hide{display:none}
+  footer .sp{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fade{animation:none}.toast{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <nav aria-label="Main">
+      <a class="brand" href="#top"><b lang="ar">ورد</b>Wird</a>
+      <a class="l hide" href="#use">How to use</a>
+      <a class="l hide" href="#install">Install</a>
+      <a class="l hide" href="#privacy">Privacy</a>
+      <a class="l gh" href="https://github.com/" id="gh">GitHub</a>
+    </nav>
+
+    <div class="hero-grid" id="top">
+      <div>
+        <h1>A verse or a hadith, whenever you pause to browse.</h1>
+        <p class="lede">Wird shows a Quran verse or a hadith every few minutes and opens a Quran reader on any web page. Arabic, English and French.</p>
+        <div class="cta">
+          <a class="btn gold" href="#install">Install Wird</a>
+          <a class="btn ghost" href="#use">See how it works</a>
+        </div>
+        <ul class="facts">
+          <li>Chrome, Edge, Brave and Firefox</li>
+          <li>Works offline</li>
+          <li>Collects no data</li>
+        </ul>
+      </div>
+
+      <div class="demo" aria-live="polite">
+        <div class="toast" id="toast">
+          <div class="toast-head"><span class="tag" id="t-tag">QURAN</span><span id="t-ref">Surah Ar-Ra'd · 13:28</span></div>
+          <div class="ar" id="t-ar" lang="ar"></div>
+          <p class="tr" id="t-tr"></p>
+          <div class="row">
+            <button class="p" id="t-next" type="button">Another</button>
+            <button type="button" id="t-copy">Copy</button>
+          </div>
+        </div>
+        <p class="demo-note">This card is live. Press “Another”.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="see">
+  <div class="wrap">
+    <h2>What you get</h2>
+    <p class="sub">A small card on the page you are reading, a full reader one shortcut away, and settings that stay out of your way.</p>
+    <div class="shots">
+      <figure class="shot wide"><img src="screenshots/reader-ayat-al-kursi.png" alt="Quran reader showing Ayat al-Kursi" loading="lazy"><figcaption>The reader opens over any page. It remembers where you stopped.</figcaption></figure>
+      <figure class="shot narrow"><img src="screenshots/popup.png" alt="Toolbar popup" loading="lazy"><figcaption>The toolbar popup.</figcaption></figure>
+      <figure class="shot"><img src="screenshots/toast-hadith.png" alt="Hadith reminder" loading="lazy"><figcaption>A hadith reminder.</figcaption></figure>
+      <figure class="shot"><img src="screenshots/reader-search.png" alt="Search results for mercy" loading="lazy"><figcaption>Search by reference, surah name or words.</figcaption></figure>
+      <figure class="shot"><img src="screenshots/reader-arabic-ui.png" alt="Reader with the Arabic interface" loading="lazy"><figcaption>Full right-to-left Arabic interface.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <h2>Built around the text</h2>
+    <ul class="feat">
+      <li><h3>Reminders</h3><p>Every 1 to 1,440 minutes. Alternate Quran and hadith, or pick one. A shuffle bag shows everything once before anything repeats.</p></li>
+      <li><h3>Content</h3><p>All 6,236 verses in Arabic, English and French. About 1,200 hadith: Forty Hadith of an-Nawawi, Forty Hadith Qudsi, and selections from Sahih al-Bukhari and Sahih Muslim.</p></li>
+      <li><h3>Reader</h3><p>Surah list, verse-by-verse reading, previous and next surah, adjustable text size. Open it with <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>Q</kbd>.</p></li>
+      <li><h3>Search</h3><p>Type <code>2:255</code>, <code>18:1-10</code>, a surah name, or words. Arabic search ignores diacritics and matches standard spelling.</p></li>
+      <li><h3>Settings</h3><p>Interval, content, hadith collections, languages, theme, card position and duration, quiet hours that can cross midnight, and sites where reminders stay off.</p></li>
+      <li><h3>Languages</h3><p>Arabic (right to left), English and French, for both the content and the interface.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section id="use">
+  <div class="wrap two">
+    <div>
+      <h2>How to use it</h2>
+      <ol class="steps">
+        <li>Install Wird. The settings page opens on first run.</li>
+        <li>Choose your interval, content and languages.</li>
+        <li>Browse as usual. A card appears on the page. Use <b>Another</b>, <b>Read in context</b> or <b>Copy</b>.</li>
+        <li>Press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>Q</kbd> on any page to open the reader.</li>
+      </ol>
+      <p class="sub" style="margin-top:18px">Want the card on the page itself? In settings, allow access to all sites. Without it, reminders appear as a toolbar badge or a notification.</p>
+    </div>
+    <div>
+      <h2>Search examples</h2>
+      <table>
+        <tr><th>Type</th><th>You get</th></tr>
+        <tr><td><span class="inline">2:255</span></td><td>Ayat al-Kursi</td></tr>
+        <tr><td><span class="inline">18:1-10</span></td><td>A range of verses</td></tr>
+        <tr><td><span class="inline">Kahf</span> or <span class="inline" lang="ar">الكهف</span></td><td>The surah, in any language</td></tr>
+        <tr><td><span class="inline">mercy</span> or <span class="inline" lang="ar">الرحمة</span></td><td>Every verse containing the word</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <h2>Install</h2>
+    <p class="sub">Store listings are coming. Until then, install from a release zip or build it yourself in three commands.</p>
+
+    <div class="tabs" role="tablist" aria-label="Browser">
+      <button class="tab" role="tab" id="tab-chrome" aria-selected="true" aria-controls="p-chrome">Chrome, Edge, Brave</button>
+      <button class="tab" role="tab" id="tab-firefox" aria-selected="false" aria-controls="p-firefox" tabindex="-1">Firefox</button>
+    </div>
+
+    <div class="panel" id="p-chrome" role="tabpanel" aria-labelledby="tab-chrome">
+      <p class="label">Build it</p>
+      <div class="cmd"><pre><span class="c"># needs Node.js 20+</span>
+git clone https://github.com/&lt;your-user&gt;/&lt;your-repo&gt;.git
+cd &lt;your-repo&gt;
+npm ci
+npm run build</pre><button type="button" data-copy>Copy</button></div>
+      <p class="label">Load it</p>
+      <ol class="steps">
+        <li>Open <span class="inline">chrome://extensions</span> (Edge: <span class="inline">edge://extensions</span>).</li>
+        <li>Turn on <b>Developer mode</b>.</li>
+        <li>Click <b>Load unpacked</b> and choose <span class="inline">.output/chrome-mv3</span>.</li>
+      </ol>
+      <p class="label">Make a store zip</p>
+      <div class="cmd"><pre>npm run zip   <span class="c"># .output/wird-&lt;version&gt;-chrome.zip</span></pre><button type="button" data-copy>Copy</button></div>
+    </div>
+
+    <div class="panel" id="p-firefox" role="tabpanel" aria-labelledby="tab-firefox" hidden>
+      <p class="label">Build it</p>
+      <div class="cmd"><pre><span class="c"># needs Node.js 20+</span>
+git clone https://github.com/&lt;your-user&gt;/&lt;your-repo&gt;.git
+cd &lt;your-repo&gt;
+npm ci
+npm run build:firefox</pre><button type="button" data-copy>Copy</button></div>
+      <p class="label">Load it</p>
+      <ol class="steps">
+        <li>Open <span class="inline">about:debugging#/runtime/this-firefox</span>.</li>
+        <li>Click <b>Load Temporary Add-on…</b></li>
+        <li>Choose <span class="inline">.output/firefox-mv3/manifest.json</span>.</li>
+      </ol>
+      <p class="sub" style="margin:8px 0 0">Temporary add-ons are removed when Firefox closes. A permanent install needs the signed add-on from Mozilla.</p>
+      <p class="label">Make the Firefox zip and sources zip</p>
+      <div class="cmd"><pre>npm run zip:firefox</pre><button type="button" data-copy>Copy</button></div>
+    </div>
+
+    <p class="label" style="margin-top:36px">Other commands</p>
+    <div class="cmd"><pre>npm run dev            <span class="c"># Chrome with hot reload</span>
+npm run dev:firefox    <span class="c"># Firefox with hot reload</span>
+npm test               <span class="c"># unit tests</span>
+npm run compile        <span class="c"># type-check</span>
+npm run lint:firefox   <span class="c"># Mozilla add-on linter</span>
+npm run data           <span class="c"># rebuild the bundled Quran and hadith data</span></pre><button type="button" data-copy>Copy</button></div>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="wrap">
+    <h2>Privacy and permissions</h2>
+    <p class="sub">Wird asks for no website access when you install it, makes no network requests and collects nothing.</p>
+    <table>
+      <tr><th>Permission</th><th>Why Wird needs it</th></tr>
+      <tr><td><span class="inline">storage</span></td><td>Saves your settings and reading position.</td></tr>
+      <tr><td><span class="inline">alarms</span></td><td>Runs the reminder timer.</td></tr>
+      <tr><td><span class="inline">activeTab</span>, <span class="inline">scripting</span></td><td>Opens the reader on the current page when you click or press the shortcut.</td></tr>
+      <tr><td>All sites <i>(optional)</i></td><td>Shows reminders on the page you are viewing. Requested only from settings.</td></tr>
+      <tr><td>Notifications <i>(optional)</i></td><td>Shows reminders as system notifications. Requested only from settings.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="sources">
+  <div class="wrap">
+    <h2>Sources and licenses</h2>
+    <ul class="lic">
+      <li>Quran text and translations: <a href="https://github.com/risan/quran-json">quran-json</a> <span>(CC-BY-4.0)</span></li>
+      <li>Hadith: <a href="https://github.com/fawazahmed0/hadith-api">fawazahmed0/hadith-api</a> <span>(Unlicense)</span></li>
+      <li>Arabic font: Amiri Quran <span>(SIL Open Font License 1.1)</span></li>
+      <li>Wird source code: MIT</li>
+    </ul>
+    <p class="sub" style="margin-top:18px">Hadith are a curated subset without grading. For study and rulings, refer to scholars and full collections such as <a href="https://sunnah.com">sunnah.com</a>.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><b lang="ar">ورد</b>Wird</span>
+    <span>MIT licensed. Free and open source.</span>
+    <a class="sp" href="#top">Back to top</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var items=[
+    {tag:"QURAN",ref:"Surah Ar-Ra'd · 13:28",ar:"ٱلَّذِينَ ءَامَنُوا۟ وَتَطْمَئِنُّ قُلُوبُهُم بِذِكْرِ ٱللَّهِ ۗ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ",tr:"Those who have believed and whose hearts are assured by the remembrance of Allah. Unquestionably, by the remembrance of Allah hearts are assured."},
+    {tag:"QURAN",ref:"Surah Ash-Sharh · 94:5-6",ar:"فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا ۝ إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا",tr:"For indeed, with hardship comes ease. Indeed, with hardship comes ease."},
+    {tag:"HADITH",ref:"Forty Hadith of an-Nawawi · 1",ar:"إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ",tr:"Actions are only by intentions."}
+  ];
+  var i=0,$=function(id){return document.getElementById(id)};
+  function show(){
+    var it=items[i];
+    $("t-tag").textContent=it.tag;$("t-ref").textContent=it.ref;
+    $("t-ar").textContent=it.ar;$("t-tr").textContent=it.tr;
+    var t=$("toast");t.classList.remove("fade");void t.offsetWidth;t.classList.add("fade");
+  }
+  $("t-next").onclick=function(){i=(i+1)%items.length;show()};
+  $("t-copy").onclick=function(){
+    var it=items[i],b=this,txt=it.ar+"\n"+it.tr+"\n— "+it.ref;
+    try{navigator.clipboard.writeText(txt).then(function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy"},1400)})}catch(e){}
+  };
+  show();
+
+  // tabs
+  var tabs=[].slice.call(document.querySelectorAll(".tab"));
+  function select(t){
+    tabs.forEach(function(x){
+      var on=x===t;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;
+      document.getElementById(x.getAttribute("aria-controls")).hidden=!on;
+    });
+  }
+  tabs.forEach(function(t,n){
+    t.onclick=function(){select(t)};
+    t.onkeydown=function(e){
+      if(e.key==="ArrowRight"||e.key==="ArrowLeft"){
+        var o=tabs[(n+(e.key==="ArrowRight"?1:tabs.length-1))%tabs.length];select(o);o.focus();
+      }
+    };
+  });
+
+  // copy buttons for command blocks
+  [].forEach.call(document.querySelectorAll("[data-copy]"),function(b){
+    b.onclick=function(){
+      var txt=b.previousElementSibling.innerText;
+      try{navigator.clipboard.writeText(txt).then(function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy"},1400)})}catch(e){}
+    };
+  });
+})();
+</script>
+</body>
+</html>
