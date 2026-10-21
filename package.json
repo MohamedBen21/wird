@@ -1,0 +1,44 @@
+{
+  "name": "wird",
+  "description": "Wird: Quran and hadith reminders, plus a Quran reader with search on any page (Chromium and Firefox)",
+  "private": true,
+  "version": "0.1.1",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox --mv3",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox --mv3",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox --mv3",
+    "data": "node scripts/build-data.mjs",
+    "compile": "tsc --noEmit",
+    "test": "vitest run",
+    "postinstall": "wxt prepare",
+    "lint:firefox": "web-ext lint --source-dir .output/firefox-mv3",
+    "test:all": "npm run compile && npm test"
+  },
+  "devDependencies": {
+    "@fontsource/amiri-quran": "^5.3.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@wxt-dev/module-react": "^1.2.2",
+    "quran-json": "^3.1.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5",
+    "web-ext": "^10.8.0",
+    "wxt": "^0.21.4"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "author": "Mohamed Benatallah"
+}
