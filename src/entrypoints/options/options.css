@@ -1,0 +1,35 @@
+.nour .options { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; display: grid; gap: 16px; }
+.nour .sec {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+.nour .sec h2 { font-size: 15px; color: var(--accent); }
+.nour .field { display: grid; gap: 6px; }
+.nour .field > label, .nour .label { font-weight: 600; font-size: 13px; }
+.nour .help { font-size: 12px; color: var(--muted); }
+.nour .inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.nour .check { display: flex; align-items: center; gap: 8px; }
+.nour .check input { width: 16px; height: 16px; accent-color: var(--accent); }
+.nour select, .nour input[type="number"], .nour input[type="time"], .nour textarea {
+  min-height: 34px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.nour input[type="number"] { width: 90px; }
+.nour textarea { width: 100%; min-height: 80px; resize: vertical; font-family: ui-monospace, monospace; font-size: 13px; }
+.nour .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.nour .chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg);
+}
+.nour .chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.nour .chip input { position: absolute; opacity: 0; pointer-events: none; }
+.nour .chip:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; }
+.nour .saved { position: fixed; bottom: 16px; inset-inline-start: 16px; padding: 6px 14px; border-radius: 999px; background: var(--accent); color: var(--accent-fg); font-weight: 600; }
+.nour .about { font-size: 12px; color: var(--muted); }
