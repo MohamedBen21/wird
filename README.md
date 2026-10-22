@@ -13,7 +13,7 @@
 
 **[Install](#-install) · [How to use](#-how-to-use) · [Build from source](#-build-from-source) · [Architecture](#-architecture) · [Privacy](#-privacy-and-permissions) · [Roadmap](#-roadmap)**
 
-<sub>A styled project page lives in <a href="docs/index.html"><code>docs/index.html</code></a> (GitHub README files cannot load CSS).</sub>
+<!-- <sub>A styled project page lives in <a href="docs/index.html"><code>docs/index.html</code></a> (GitHub README files cannot load CSS).</sub> -->
 
 </div>
 
@@ -117,8 +117,8 @@ Permanent install requires the signed add-on from AMO.
 **Requirements:** [Node.js](https://nodejs.org) 20 or newer and npm.
 
 ```bash
-git clone https://github.com/<your-user>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/MohamedBen21/wird.git
+cd wird
 npm ci
 ```
 
