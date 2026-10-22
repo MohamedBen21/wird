@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/banner.png" alt="Wird – Quran verses and hadith reminders while you browse" width="100%">
+<img src="docs/banner.svg" alt="Wird – Quran verses and hadith reminders while you browse" width="100%">
 
 <br>
 
@@ -29,6 +29,13 @@
 - 🔒 is **offline and private**: all content ships inside the extension, no network requests, nothing collected.
 
 One codebase builds for **Chrome, Edge, Brave and other Chromium browsers**, and for **Firefox**.
+
+## 🎬 See it in action
+
+<div align="center">
+  <img src="docs/demo.gif" alt="Wird demo: a reminder appears, then the Quran reader opens and searches" width="860">
+  <br><sub>A reminder card, then the reader opened with <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd>, searching for “mercy” and <code>18:1</code>.</sub>
+</div>
 
 ## 🖼 Screenshots
 
